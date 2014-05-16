@@ -1,0 +1,170 @@
+﻿<Page
+    x:Name="pageRoot"
+    x:Class="ContousCookbook.HubPage"
+    DataContext="{Binding DefaultViewModel, RelativeSource={RelativeSource Self}}"
+    xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+    xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+    xmlns:local="using:ContousCookbook"
+    xmlns:data="using:ContousCookbook.Data"
+    xmlns:common="using:ContousCookbook.Common"
+    xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+    xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+    mc:Ignorable="d">
+
+    <Page.Resources>
+        <!-- Grid-appropriate 310 by 260 pixel item template as seen in section 4 -->
+        <DataTemplate x:Key="Standard310x260ItemTemplate">
+            <Grid Height="250" Width="310" Margin="5,10,5,10">
+                <Grid.RowDefinitions>
+                    <RowDefinition Height="Auto"/>
+                    <RowDefinition Height="*"/>
+                </Grid.RowDefinitions>
+                <Border Background="{ThemeResource ListViewItemPlaceholderBackgroundThemeBrush}" Height="150">
+                    <Image Source="{Binding ImagePath}" Stretch="UniformToFill" AutomationProperties.Name="{Binding Title}"/>
+                </Border>
+                <StackPanel Grid.Row="1" Margin="0,10,0,0">
+                    <TextBlock Text="{Binding Title}" Style="{StaticResource TitleTextBlockStyle}" TextWrapping="NoWrap"/>
+                    <TextBlock Text="{Binding Description}" Style="{StaticResource BodyTextBlockStyle}" MaxHeight="60" />
+                </StackPanel>
+            </Grid>
+        </DataTemplate>
+
+        <DataTemplate x:Key="GroupItemsTemplate">
+            <Grid Margin="2">
+                <StackPanel Orientation="Horizontal">
+                    <Image Source="{Binding GroupHeaderImagePath}" Stretch="UniformToFill" />
+                    <Image Source="{Binding Items[0].TileImagePath}" Stretch="UniformToFill" />
+                </StackPanel>
+                <TextBlock Text="{Binding Title}" HorizontalAlignment="Left" Margin="20" Foreground="{StaticResource ListViewItemOverlayForegroundThemeBrush}" Style="{StaticResource SubheaderTextBlockStyle}" />
+            </Grid>
+        </DataTemplate>
+
+    </Page.Resources>
+
+    <!--
+    This grid acts as a root panel for the page.
+  -->
+    <Grid Background="{ThemeResource ApplicationPageBackgroundThemeBrush}">
+        <Grid.ChildrenTransitions>
+            <TransitionCollection>
+                <EntranceThemeTransition/>
+            </TransitionCollection>
+        </Grid.ChildrenTransitions>
+        <Hub SectionHeaderClick="Hub_SectionHeaderClick">
+            <Hub.Header>
+                <!-- Back button and page title -->
+                <Grid>
+                    <Grid.ColumnDefinitions>
+                        <ColumnDefinition Width="80"/>
+                        <ColumnDefinition Width="*"/>
+                    </Grid.ColumnDefinitions>
+                    <Button  x:Name="backButton" Style="{StaticResource NavigationBackButtonNormalStyle}"
+                        Margin="-1,-1,39,0" 
+                        VerticalAlignment="Top"
+                        Command="{Binding NavigationHelper.GoBackCommand, ElementName=pageRoot}"
+                        AutomationProperties.Name="Back"
+                        AutomationProperties.AutomationId="BackButton"
+                        AutomationProperties.ItemType="Navigation Button"/>
+                    <TextBlock x:Name="pageTitle" Text="{StaticResource AppName}" Style="{StaticResource HeaderTextBlockStyle}" Grid.Column="1" 
+                        VerticalAlignment="Top" IsHitTestVisible="false" TextWrapping="NoWrap" />
+                </Grid>
+            </Hub.Header>
+            <HubSection Width="780" Margin="0,0,80,0" VerticalContentAlignment="Bottom">
+                <HubSection.Background>
+                    <ImageBrush ImageSource="Images/Hero.png" Stretch="UniformToFill"/>
+                </HubSection.Background>
+                <DataTemplate>
+                    <TextBlock Text="Salad Week" Style="{StaticResource HeaderTextBlockStyle}"/>
+                </DataTemplate>
+            </HubSection>
+            <HubSection Width="500" x:Uid="Section1Header" Header="Feature Recipe"
+                        DataContext="{Binding Section1Item}" d:DataContext="{Binding Groups[4].Items[3], Source={d:DesignData Source=/DataModel/SampleData.json, Type=data:SampleDataSource}}">
+                <DataTemplate>
+                    <Grid>
+                        <Grid.RowDefinitions>
+                            <RowDefinition Height="Auto" />
+                            <RowDefinition Height="Auto" />
+                            <RowDefinition Height="Auto" />
+                            <RowDefinition Height="*" />
+                        </Grid.RowDefinitions>
+                        <Image Source="{Binding ImagePath}" Stretch="Fill" Width="420" Height="280"/>
+                        <TextBlock Style="{StaticResource SubheaderTextBlockStyle}" Grid.Row="1" Margin="0,10,0,0" TextWrapping="Wrap"  
+                                   Text="{Binding Title}"/>
+                        <TextBlock Style="{StaticResource TitleTextBlockStyle}" Grid.Row="2" Margin="0,10,0,0" 
+                                   Text="{Binding Title}"/>
+                        <TextBlock Style="{StaticResource BodyTextBlockStyle}" Grid.Row="3"
+                                   Text="{Binding Title}"/>
+                    </Grid>
+                </DataTemplate>
+            </HubSection>
+            <HubSection x:Uid="Section2Header" Header="International Cuisine"
+                DataContext="{Binding Section2Items}" d:DataContext="{Binding Groups, Source={d:DesignData Source=/DataModel/SampleData.json, Type=data:SampleDataSource}}">
+                <DataTemplate>
+                    <ListView
+                        x:Name="groupListView"
+                        AutomationProperties.AutomationId="GroupListView"
+                        AutomationProperties.Name="Groups"
+                        TabIndex="1"
+
+                        Grid.Row="1"
+                        Margin="-9,-6,0,0"
+                        ItemsSource="{Binding}"
+                        ItemTemplate="{StaticResource GroupItemsTemplate}"
+                        SelectionMode="None"
+                        IsSwipeEnabled="false"
+                        IsItemClickEnabled="True"
+                        ItemClick="ItemView_GroupClick">
+                    </ListView>
+                </DataTemplate>
+            </HubSection>
+
+            <HubSection IsHeaderInteractive="False" DataContext="{Binding Section3Items}" d:DataContext="{Binding Groups[3], Source={d:DesignData Source=/DataModel/SampleData.json, Type=data:SampleDataSource}}" x:Uid="Section3Header" Header="Top Rated" Padding="40,40,40,32">
+
+                <DataTemplate>
+                    <GridView
+                        x:Name="itemGridView"
+                        ItemsSource="{Binding Items}"
+                        Margin="-9,-14,0,0"
+                        AutomationProperties.AutomationId="ItemGridView"
+                        AutomationProperties.Name="Items In Group"
+                        ItemTemplate="{StaticResource Standard310x260ItemTemplate}"
+                        SelectionMode="None"
+                        IsSwipeEnabled="false"
+                        IsItemClickEnabled="True"
+                        ItemClick="ItemView_ItemClick">
+                    </GridView>
+                </DataTemplate>
+            </HubSection>
+            <HubSection x:Uid="Section4Header" Header="Health Food">
+                <DataTemplate>
+                    <!-- width of 400 -->
+                    <StackPanel Orientation="Vertical">
+                        <Grid>
+                            <Grid.ColumnDefinitions>
+                                <ColumnDefinition Width="130"/>
+                                <ColumnDefinition Width="5"/>
+                                <ColumnDefinition Width="130"/>
+                                <ColumnDefinition Width="5"/>
+                                <ColumnDefinition Width="130"/>
+                            </Grid.ColumnDefinitions>
+                            <Grid.RowDefinitions>
+                                <RowDefinition Height="270"/>
+                                <RowDefinition Height="95"/>
+                                <RowDefinition Height="Auto" />
+                                <RowDefinition Height="*" />
+                            </Grid.RowDefinitions>
+                            <Image Source="Image/Bread.jpg" Grid.ColumnSpan="5" Margin="0,0,0,10" Stretch="Fill" />
+                            <Image Source="Image/Vegetables.jpg" Grid.Row="1" Stretch="Fill"/>
+                            <Image Source="Image/Peppers.jpg" Grid.Row="1" Grid.Column="2" Stretch="Fill"/>
+                            <Image Source="Image/Grain.jpg" Grid.Row="1" Grid.Column="4" Stretch="Fill"/>
+                            <TextBlock Style="{StaticResource TitleTextBlockStyle}" Grid.Row="2" Grid.ColumnSpan="5"  Margin="0,15,0,0"
+                                       x:Uid="DescriptionHeader" Text="Description text:"/>
+                            <TextBlock Style="{StaticResource BodyTextBlockStyle}" Grid.Row="3" Grid.ColumnSpan="5"
+                                       x:Uid="LongText" Text="Lorem ipsum dolor sit amet, consectetuer ising elit, sed diam nonummy nibh uismod tincidunt ut laoreet suscipit lobortis ni ut wisi quipexerci quis consequat minim veniam, quis nostrud exerci tation ullam corper. Lorem ipsum dolor sit amet, consectetuer ising elit, sed diam nonummy nibh uismod tincidunt ut laoreet suscipit lobortis ni ut wisi quipexerci quis consequat minim veniam, quis nostrud exerci tation ullam corper."/>
+                        </Grid>
+                    </StackPanel>
+                </DataTemplate>
+            </HubSection>
+        </Hub>
+    </Grid>
+</Page>
