@@ -76,6 +76,7 @@ namespace ContousCookbook
             var topRated = await SampleDataSource.GetTopRatedRecipesAsync(6);
             this.DefaultViewModel["Section3Items"] = topRated;
 
+            this.defaultViewModel["ZoomedOutList"] = this.GetSectionList();
         }
 
         /// <summary>
@@ -134,5 +135,23 @@ namespace ContousCookbook
         }
 
         #endregion
+
+        private IEnumerable<string> GetSectionList()
+        {
+            var sections = this.Hub.Sections;
+            var headers = new List<string>();
+
+            foreach (var item in sections)
+            {
+                var section = (HubSection)item;
+                var header = (string)section.Header;
+                if (string.IsNullOrWhiteSpace(header))
+                {
+                    continue;
+                }
+
+                yield return header;
+            }
+        }
     }
 }

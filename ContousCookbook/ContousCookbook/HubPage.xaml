@@ -50,57 +50,60 @@
                 <EntranceThemeTransition/>
             </TransitionCollection>
         </Grid.ChildrenTransitions>
-        <Hub SectionHeaderClick="Hub_SectionHeaderClick">
-            <Hub.Header>
-                <!-- Back button and page title -->
-                <Grid>
-                    <Grid.ColumnDefinitions>
-                        <ColumnDefinition Width="80"/>
-                        <ColumnDefinition Width="*"/>
-                    </Grid.ColumnDefinitions>
-                    <Button  x:Name="backButton" Style="{StaticResource NavigationBackButtonNormalStyle}"
+
+        <SemanticZoom x:Name="Zoom" Padding="0">
+            <SemanticZoom.ZoomedInView>
+                <Hub x:Name="Hub" SectionHeaderClick="Hub_SectionHeaderClick">
+                    <Hub.Header>
+                        <!-- Back button and page title -->
+                        <Grid>
+                            <Grid.ColumnDefinitions>
+                                <ColumnDefinition Width="80"/>
+                                <ColumnDefinition Width="*"/>
+                            </Grid.ColumnDefinitions>
+                            <Button  x:Name="backButton" Style="{StaticResource NavigationBackButtonNormalStyle}"
                         Margin="-1,-1,39,0" 
                         VerticalAlignment="Top"
                         Command="{Binding NavigationHelper.GoBackCommand, ElementName=pageRoot}"
                         AutomationProperties.Name="Back"
                         AutomationProperties.AutomationId="BackButton"
                         AutomationProperties.ItemType="Navigation Button"/>
-                    <TextBlock x:Name="pageTitle" Text="{StaticResource AppName}" Style="{StaticResource HeaderTextBlockStyle}" Grid.Column="1" 
+                            <TextBlock x:Name="pageTitle" Text="{StaticResource AppName}" Style="{StaticResource HeaderTextBlockStyle}" Grid.Column="1" 
                         VerticalAlignment="Top" IsHitTestVisible="false" TextWrapping="NoWrap" />
-                </Grid>
-            </Hub.Header>
-            <HubSection Width="780" Margin="0,0,80,0" VerticalContentAlignment="Bottom">
-                <HubSection.Background>
-                    <ImageBrush ImageSource="Images/Hero.png" Stretch="UniformToFill"/>
-                </HubSection.Background>
-                <DataTemplate>
-                    <TextBlock Text="Salad Week" Style="{StaticResource HeaderTextBlockStyle}"/>
-                </DataTemplate>
-            </HubSection>
-            <HubSection Width="500" x:Uid="Section1Header" Header="Feature Recipe"
+                        </Grid>
+                    </Hub.Header>
+                    <HubSection Width="780" Margin="0,0,80,0" VerticalContentAlignment="Bottom">
+                        <HubSection.Background>
+                            <ImageBrush ImageSource="Images/Hero.png" Stretch="UniformToFill"/>
+                        </HubSection.Background>
+                        <DataTemplate>
+                            <TextBlock Text="Salad Week" Style="{StaticResource HeaderTextBlockStyle}"/>
+                        </DataTemplate>
+                    </HubSection>
+                    <HubSection Width="500" x:Uid="Section1Header" Header="Feature Recipe"
                         DataContext="{Binding Section1Item}" d:DataContext="{Binding Groups[0].Items[4], Source={d:DesignData Source=/DataModel/SampleData.json, Type=data:SampleDataSource}}">
-                <DataTemplate>
-                    <Grid>
-                        <Grid.RowDefinitions>
-                            <RowDefinition Height="Auto" />
-                            <RowDefinition Height="Auto" />
-                            <RowDefinition Height="Auto" />
-                            <RowDefinition Height="*" />
-                        </Grid.RowDefinitions>
-                        <Image Source="{Binding ImagePath}" Stretch="Fill" Width="420" Height="280"/>
-                        <TextBlock Style="{StaticResource SubheaderTextBlockStyle}" Grid.Row="1" Margin="0,10,0,0" TextWrapping="Wrap"  
+                        <DataTemplate>
+                            <Grid>
+                                <Grid.RowDefinitions>
+                                    <RowDefinition Height="Auto" />
+                                    <RowDefinition Height="Auto" />
+                                    <RowDefinition Height="Auto" />
+                                    <RowDefinition Height="*" />
+                                </Grid.RowDefinitions>
+                                <Image Source="{Binding ImagePath}" Stretch="Fill" Width="420" Height="280"/>
+                                <TextBlock Style="{StaticResource SubheaderTextBlockStyle}" Grid.Row="1" Margin="0,10,0,0" TextWrapping="Wrap"  
                                    Text="{Binding Title}"/>
-                        <TextBlock Style="{StaticResource TitleTextBlockStyle}" Grid.Row="2" Margin="0,10,0,0" 
+                                <TextBlock Style="{StaticResource TitleTextBlockStyle}" Grid.Row="2" Margin="0,10,0,0" 
                                    Text="{Binding Title}"/>
-                        <TextBlock Style="{StaticResource BodyTextBlockStyle}" Grid.Row="3"
+                                <TextBlock Style="{StaticResource BodyTextBlockStyle}" Grid.Row="3"
                                    Text="{Binding Title}"/>
-                    </Grid>
-                </DataTemplate>
-            </HubSection>
-            <HubSection x:Uid="Section2Header" Header="International Cuisine"
+                            </Grid>
+                        </DataTemplate>
+                    </HubSection>
+                    <HubSection x:Uid="Section2Header" Header="International Cuisine"
                 DataContext="{Binding Section2Items}" d:DataContext="{Binding Groups, Source={d:DesignData Source=/DataModel/SampleData.json, Type=data:SampleDataSource}}" Width="535">
-                <DataTemplate>
-                    <ListView
+                        <DataTemplate>
+                            <ListView
                         x:Name="groupListView"
                         AutomationProperties.AutomationId="GroupListView"
                         AutomationProperties.Name="Groups"
@@ -114,19 +117,19 @@
                         IsSwipeEnabled="false"
                         IsItemClickEnabled="True"
                         ItemClick="ItemView_GroupClick" Width="498" RenderTransformOrigin="0.5,0.5">
-                        <ListView.RenderTransform>
-                            <CompositeTransform SkewY="1.718" TranslateY="7.47"/>
-                        </ListView.RenderTransform>
-                    </ListView>
-                </DataTemplate>
-            </HubSection>
+                                <ListView.RenderTransform>
+                                    <CompositeTransform SkewY="1.718" TranslateY="7.47"/>
+                                </ListView.RenderTransform>
+                            </ListView>
+                        </DataTemplate>
+                    </HubSection>
 
-            <HubSection IsHeaderInteractive="False" DataContext="{Binding Section3Items}" 
+                    <HubSection IsHeaderInteractive="False" DataContext="{Binding Section3Items}" 
                         d:DataContext="{Binding Groups[3], Source={d:DesignData Source=/DataModel/SampleData.json, Type=data:SampleDataSource}}" 
                         x:Uid="Section3Header" Header="Top Rated" Padding="40,40,40,32">
 
-                <DataTemplate>
-                    <GridView
+                        <DataTemplate>
+                            <GridView
                         x:Name="itemGridView"
                         ItemsSource="{Binding Items}"
                         Margin="-9,-14,0,0"
@@ -137,39 +140,60 @@
                         IsSwipeEnabled="false"
                         IsItemClickEnabled="True"
                         ItemClick="ItemView_ItemClick">
-                    </GridView>
-                </DataTemplate>
-            </HubSection>
-            <HubSection x:Uid="Section4Header" Header="Health Food">
-                <DataTemplate>
-                    <!-- width of 400 -->
-                    <StackPanel Orientation="Vertical">
-                        <Grid>
-                            <Grid.ColumnDefinitions>
-                                <ColumnDefinition Width="130"/>
-                                <ColumnDefinition Width="5"/>
-                                <ColumnDefinition Width="130"/>
-                                <ColumnDefinition Width="5"/>
-                                <ColumnDefinition Width="130"/>
-                            </Grid.ColumnDefinitions>
-                            <Grid.RowDefinitions>
-                                <RowDefinition Height="270"/>
-                                <RowDefinition Height="95"/>
-                                <RowDefinition Height="Auto" />
-                                <RowDefinition Height="*" />
-                            </Grid.RowDefinitions>
-                            <Image Source="Images/Bread.jpg" Grid.ColumnSpan="5" Margin="0,0,0,10" Stretch="Fill" />
-                            <Image Source="Images/Vegetables.jpg" Grid.Row="1" Stretch="Fill"/>
-                            <Image Source="Images/Peppers.jpg" Grid.Row="1" Grid.Column="2" Stretch="Fill"/>
-                            <Image Source="Images/Grain.jpg" Grid.Row="1" Grid.Column="4" Stretch="Fill"/>
-                            <TextBlock Style="{StaticResource TitleTextBlockStyle}" Grid.Row="2" Grid.ColumnSpan="5"  Margin="0,15,0,0"
+                            </GridView>
+                        </DataTemplate>
+                    </HubSection>
+                    <HubSection x:Uid="Section4Header" Header="Health Food">
+                        <DataTemplate>
+                            <!-- width of 400 -->
+                            <StackPanel Orientation="Vertical">
+                                <Grid>
+                                    <Grid.ColumnDefinitions>
+                                        <ColumnDefinition Width="130"/>
+                                        <ColumnDefinition Width="5"/>
+                                        <ColumnDefinition Width="130"/>
+                                        <ColumnDefinition Width="5"/>
+                                        <ColumnDefinition Width="130"/>
+                                    </Grid.ColumnDefinitions>
+                                    <Grid.RowDefinitions>
+                                        <RowDefinition Height="270"/>
+                                        <RowDefinition Height="95"/>
+                                        <RowDefinition Height="Auto" />
+                                        <RowDefinition Height="*" />
+                                    </Grid.RowDefinitions>
+                                    <Image Source="Images/Bread.jpg" Grid.ColumnSpan="5" Margin="0,0,0,10" Stretch="Fill" />
+                                    <Image Source="Images/Vegetables.jpg" Grid.Row="1" Stretch="Fill"/>
+                                    <Image Source="Images/Peppers.jpg" Grid.Row="1" Grid.Column="2" Stretch="Fill"/>
+                                    <Image Source="Images/Grain.jpg" Grid.Row="1" Grid.Column="4" Stretch="Fill"/>
+                                    <TextBlock Style="{StaticResource TitleTextBlockStyle}" Grid.Row="2" Grid.ColumnSpan="5"  Margin="0,15,0,0"
                                        x:Uid="DescriptionHeader" Text="Description text:"/>
-                            <TextBlock Style="{StaticResource BodyTextBlockStyle}" Grid.Row="3" Grid.ColumnSpan="5"
+                                    <TextBlock Style="{StaticResource BodyTextBlockStyle}" Grid.Row="3" Grid.ColumnSpan="5"
                                        x:Uid="LongText" Text="Lorem ipsum dolor sit amet, consectetuer ising elit, sed diam nonummy nibh uismod tincidunt ut laoreet suscipit lobortis ni ut wisi quipexerci quis consequat minim veniam, quis nostrud exerci tation ullam corper. Lorem ipsum dolor sit amet, consectetuer ising elit, sed diam nonummy nibh uismod tincidunt ut laoreet suscipit lobortis ni ut wisi quipexerci quis consequat minim veniam, quis nostrud exerci tation ullam corper."/>
-                        </Grid>
-                    </StackPanel>
-                </DataTemplate>
-            </HubSection>
-        </Hub>
+                                </Grid>
+                            </StackPanel>
+                        </DataTemplate>
+                    </HubSection>
+                </Hub>
+            </SemanticZoom.ZoomedInView>
+            <SemanticZoom.ZoomedOutView>
+                <GridView VerticalAlignment="Top" Margin="80,100,0,0" SelectionMode="None" ItemsSource="{Binding}" DataContext="{Binding ZoomedOutList}">
+                    <GridView.ItemTemplate>
+                        <DataTemplate>
+                            <Grid HorizontalAlignment="Left" MinWidth="290" MinHeight="140">
+                                <Grid.Background>
+                                    <SolidColorBrush Color="Gray" />
+                                </Grid.Background>
+                                <StackPanel VerticalAlignment="Bottom" Margin="20">
+                                    <TextBlock HorizontalAlignment="Left" VerticalAlignment="Bottom" Text="{Binding}" FontWeight="Bold" FontSize="22" TextWrapping="WrapWholeWords" />
+                                </StackPanel>
+                            </Grid>
+                        </DataTemplate>
+                    </GridView.ItemTemplate>
+                </GridView>
+
+            </SemanticZoom.ZoomedOutView>
+        </SemanticZoom>
+
+
     </Grid>
 </Page>
