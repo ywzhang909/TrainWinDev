@@ -78,7 +78,7 @@
                 </DataTemplate>
             </HubSection>
             <HubSection Width="500" x:Uid="Section1Header" Header="Feature Recipe"
-                        DataContext="{Binding Section1Item}" d:DataContext="{Binding Groups[4].Items[3], Source={d:DesignData Source=/DataModel/SampleData.json, Type=data:SampleDataSource}}">
+                        DataContext="{Binding Section1Item}" d:DataContext="{Binding Groups[0].Items[4], Source={d:DesignData Source=/DataModel/SampleData.json, Type=data:SampleDataSource}}">
                 <DataTemplate>
                     <Grid>
                         <Grid.RowDefinitions>
@@ -105,7 +105,7 @@
                         AutomationProperties.AutomationId="GroupListView"
                         AutomationProperties.Name="Groups"
                         TabIndex="1"
-
+                        
                         Grid.Row="1"
                         Margin="-9,-6,0,0"
                         ItemsSource="{Binding}"
@@ -113,12 +113,14 @@
                         SelectionMode="None"
                         IsSwipeEnabled="false"
                         IsItemClickEnabled="True"
-                        ItemClick="ItemView_GroupClick">
+                        ItemClick="ItemView_GroupClick" Width="501">
                     </ListView>
                 </DataTemplate>
             </HubSection>
 
-            <HubSection IsHeaderInteractive="False" DataContext="{Binding Section3Items}" d:DataContext="{Binding Groups[3], Source={d:DesignData Source=/DataModel/SampleData.json, Type=data:SampleDataSource}}" x:Uid="Section3Header" Header="Top Rated" Padding="40,40,40,32">
+            <HubSection IsHeaderInteractive="False" DataContext="{Binding Section3Items}" 
+                        d:DataContext="{Binding Groups[3], Source={d:DesignData Source=/DataModel/SampleData.json, Type=data:SampleDataSource}}" 
+                        x:Uid="Section3Header" Header="Top Rated" Padding="40,40,40,32">
 
                 <DataTemplate>
                     <GridView

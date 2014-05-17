@@ -33,7 +33,46 @@
             TODO: Content should be placed within the following grid 
                   to show details for the current item
         -->
-        <Grid Grid.Row="1" x:Name="contentRegion"/>
+        <Grid Grid.Row="1" x:Name="contentRegion" Margin="120,0,20,20" >
+            <Grid.ColumnDefinitions>
+                <ColumnDefinition Width="400" />
+                <ColumnDefinition Width="40" />
+                <ColumnDefinition Width="360" />
+                <ColumnDefinition Width="40" />
+                <ColumnDefinition />
+            </Grid.ColumnDefinitions>
+
+            <StackPanel Orientation="Vertical" Grid.Column="0">
+                <TextBlock FontSize="26.667" FontWeight="Light" Text="{Binding Title}" TextWrapping="Wrap"/>
+                <Image x:Name="image" Width="400" Margin="0,20,0,10" Stretch="Uniform" Source="{Binding ImagePath}"/>
+                <TextBlock FontSize="26.667" FontWeight="Light">
+    <Run Text="Preparation time: "/>
+    <Run Text="{Binding PreparationTime}" />
+    <Run Text=" minutes"/>
+                </TextBlock>
+            </StackPanel>
+
+            <StackPanel Orientation="Vertical" Grid.Column="2">
+                <TextBlock Style="{StaticResource SubheaderTextBlockStyle}" Text="Ingredients" Margin="0,0,0,16"/>
+                <ItemsControl ItemsSource="{Binding Ingredients}">
+                    <ItemsControl.ItemTemplate>
+                        <DataTemplate>
+                            <TextBlock TextWrapping="Wrap" LineHeight="32.5" FontSize="20" FontWeight="Light" Text="{Binding}" />
+                        </DataTemplate>
+                    </ItemsControl.ItemTemplate>
+                </ItemsControl>
+            </StackPanel>
+
+            <StackPanel Orientation="Vertical" Grid.Column="4">
+                <TextBlock Style="{StaticResource SubheaderTextBlockStyle}" Text="Directions" Margin="0,0,0,16"/>
+                <ScrollViewer HorizontalScrollBarVisibility="Disabled" VerticalScrollBarVisibility="Auto" HorizontalScrollMode="Disabled" VerticalScrollMode="Enabled" ZoomMode="Disabled">
+                    <Grid>
+                        <TextBlock FontSize="20" FontWeight="Light" Text="{Binding Content}" TextWrapping="Wrap" />
+                    </Grid>
+                </ScrollViewer>
+            </StackPanel>
+        </Grid>
+
 
         <!-- Back button and page title -->
         <Grid>
