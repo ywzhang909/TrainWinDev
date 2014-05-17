@@ -92,7 +92,7 @@ namespace ContousCookbook
 
             if (file.FileType == ".wmv" || file.FileType == ".mp4")
             {
-                this.Frame.Navigate(typeof(ContousCookbook.PlaybackPage), file);
+                this.Frame.Navigate(typeof(PlaybackPage), file);
             }
         }
 

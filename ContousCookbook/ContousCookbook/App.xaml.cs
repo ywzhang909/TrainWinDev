@@ -16,7 +16,8 @@ using Windows.UI.Xaml.Data;
 using Windows.UI.Xaml.Input;
 using Windows.UI.Xaml.Media;
 using Windows.UI.Xaml.Navigation;
-
+using Windows.UI.ApplicationSettings;
+using Windows.Storage;
 // The Hub App template is documented at http://go.microsoft.com/fwlink/?LinkId=321221
 
 namespace ContousCookbook
@@ -80,6 +81,24 @@ namespace ContousCookbook
                     }
                 }
 
+                // Register handler for CommandsRequested events from the settings pane
+                SettingsPane.GetForCurrentView().CommandsRequested += OnCommandsRequested;
+
+                // If the app was closed by the user the last time it ran, and if "Remember
+                // "where I was" is enabled, restore the navigation state
+                if (e.PreviousExecutionState == ApplicationExecutionState.ClosedByUser)
+                {
+                    if (ApplicationData.Current.RoamingSettings.Values.ContainsKey("Remember"))
+                    {
+                        bool remember = (bool)ApplicationData.Current.RoamingSettings.Values["Remember"];
+                        if (remember)
+                        {
+                            await SuspensionManager.RestoreAsync();
+                        }
+                    }
+                }
+
+
                 // Place the frame in the current Window
                 Window.Current.Content = rootFrame;
             }
@@ -117,5 +136,27 @@ namespace ContousCookbook
             await SuspensionManager.SaveAsync();
             deferral.Complete();
         }
+
+        private void OnCommandsRequested(SettingsPane sender, SettingsPaneCommandsRequestedEventArgs args)
+        {
+            // Add an About command
+            var about = new SettingsCommand("about", "About", (handler) =>
+            {
+                var aboutFlyout = new AboutFlyout();
+                aboutFlyout.Show();
+            });
+
+            args.Request.ApplicationCommands.Add(about);
+
+            // Add a Preferences command
+            var preferences = new SettingsCommand("preferences", "Preferences", (handler) =>
+            {
+                var preferenceFlyout = new PreferenceFlyout();
+                preferenceFlyout.Show();
+            });
+
+            args.Request.ApplicationCommands.Add(preferences);
+        }
+
     }
 }
