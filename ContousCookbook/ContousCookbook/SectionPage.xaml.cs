@@ -53,6 +53,19 @@ namespace ContousCookbook
             this.InitializeComponent();
             this.navigationHelper = new NavigationHelper(this);
             this.navigationHelper.LoadState += navigationHelper_LoadState;
+            this.SizeChanged += SectionPage_SizeChanged;
+        }
+
+        private void SectionPage_SizeChanged(object sender, SizeChangedEventArgs e)
+        {
+            if (e.NewSize.Width <= 900)
+            {
+                VisualStateManager.GoToState(this, "NarrowLayout", true);
+            }
+            else
+            {
+                VisualStateManager.GoToState(this, "DefaultLayout", true);
+            }
         }
 
         /// <summary>

@@ -98,7 +98,7 @@
                 </DataTemplate>
             </HubSection>
             <HubSection x:Uid="Section2Header" Header="International Cuisine"
-                DataContext="{Binding Section2Items}" d:DataContext="{Binding Groups, Source={d:DesignData Source=/DataModel/SampleData.json, Type=data:SampleDataSource}}">
+                DataContext="{Binding Section2Items}" d:DataContext="{Binding Groups, Source={d:DesignData Source=/DataModel/SampleData.json, Type=data:SampleDataSource}}" Width="535">
                 <DataTemplate>
                     <ListView
                         x:Name="groupListView"
@@ -113,7 +113,10 @@
                         SelectionMode="None"
                         IsSwipeEnabled="false"
                         IsItemClickEnabled="True"
-                        ItemClick="ItemView_GroupClick" Width="501">
+                        ItemClick="ItemView_GroupClick" Width="498" RenderTransformOrigin="0.5,0.5">
+                        <ListView.RenderTransform>
+                            <CompositeTransform SkewY="1.718" TranslateY="7.47"/>
+                        </ListView.RenderTransform>
                     </ListView>
                 </DataTemplate>
             </HubSection>
@@ -155,10 +158,10 @@
                                 <RowDefinition Height="Auto" />
                                 <RowDefinition Height="*" />
                             </Grid.RowDefinitions>
-                            <Image Source="Image/Bread.jpg" Grid.ColumnSpan="5" Margin="0,0,0,10" Stretch="Fill" />
-                            <Image Source="Image/Vegetables.jpg" Grid.Row="1" Stretch="Fill"/>
-                            <Image Source="Image/Peppers.jpg" Grid.Row="1" Grid.Column="2" Stretch="Fill"/>
-                            <Image Source="Image/Grain.jpg" Grid.Row="1" Grid.Column="4" Stretch="Fill"/>
+                            <Image Source="Images/Bread.jpg" Grid.ColumnSpan="5" Margin="0,0,0,10" Stretch="Fill" />
+                            <Image Source="Images/Vegetables.jpg" Grid.Row="1" Stretch="Fill"/>
+                            <Image Source="Images/Peppers.jpg" Grid.Row="1" Grid.Column="2" Stretch="Fill"/>
+                            <Image Source="Images/Grain.jpg" Grid.Row="1" Grid.Column="4" Stretch="Fill"/>
                             <TextBlock Style="{StaticResource TitleTextBlockStyle}" Grid.Row="2" Grid.ColumnSpan="5"  Margin="0,15,0,0"
                                        x:Uid="DescriptionHeader" Text="Description text:"/>
                             <TextBlock Style="{StaticResource BodyTextBlockStyle}" Grid.Row="3" Grid.ColumnSpan="5"

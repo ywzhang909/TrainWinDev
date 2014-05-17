@@ -46,9 +46,9 @@
                 <TextBlock FontSize="26.667" FontWeight="Light" Text="{Binding Title}" TextWrapping="Wrap"/>
                 <Image x:Name="image" Width="400" Margin="0,20,0,10" Stretch="Uniform" Source="{Binding ImagePath}"/>
                 <TextBlock FontSize="26.667" FontWeight="Light">
-    <Run Text="Preparation time: "/>
-    <Run Text="{Binding PreparationTime}" />
-    <Run Text=" minutes"/>
+                    <Run Text="Preparation time: "/>
+                    <Run Text="{Binding PreparationTime}" />
+                    <Run Text=" minutes"/>
                 </TextBlock>
             </StackPanel>
 
@@ -73,6 +73,85 @@
             </StackPanel>
         </Grid>
 
+        <!-- Single column grid only used in narrow layouts -->
+        <Grid Grid.Row="1" x:Name="narrowContentRegion" Visibility="Collapsed" Margin="120,0,20,20">
+            <ScrollViewer HorizontalScrollBarVisibility="Disabled" VerticalScrollBarVisibility="Auto" HorizontalScrollMode="Disabled" VerticalScrollMode="Enabled" ZoomMode="Disabled">
+                <StackPanel Orientation="Vertical" Margin="0,0,30,0">
+                    <StackPanel Orientation="Vertical">
+                        <TextBlock FontSize="26.667" FontWeight="Light" Text="{Binding Title}" TextWrapping="Wrap"/>
+                        <Image MaxWidth="400" Margin="0,20,0,10" Stretch="Uniform" Source="{Binding ImagePath}" HorizontalAlignment="Left"/>
+                        <TextBlock FontSize="20" FontWeight="Light">
+                    <Run Text="Preparation time: "/>
+                    <Run Text="{Binding PreparationTime}" />
+                    <Run Text=" minutes"/>
+                        </TextBlock>
+                    </StackPanel>
+
+                    <StackPanel Orientation="Vertical" Margin="0,40,0,0">
+                        <TextBlock Style="{StaticResource SubheaderTextBlockStyle}" Text="Ingredients" Margin="0,0,0,16"/>
+                        <ItemsControl ItemsSource="{Binding Ingredients}">
+                            <ItemsControl.ItemTemplate>
+                                <DataTemplate>
+                                    <TextBlock TextWrapping="Wrap" LineHeight="32.5" FontSize="20" FontWeight="Light" Text="{Binding}" />
+                                </DataTemplate>
+                            </ItemsControl.ItemTemplate>
+                        </ItemsControl>
+                    </StackPanel>
+
+                    <StackPanel Orientation="Vertical" Margin="0,40,0,0">
+                        <TextBlock Style="{StaticResource SubheaderTextBlockStyle}" Text="Directions" Margin="0,0,0,16"/>
+                        <ScrollViewer HorizontalScrollBarVisibility="Disabled" VerticalScrollBarVisibility="Auto" HorizontalScrollMode="Disabled" VerticalScrollMode="Enabled" ZoomMode="Disabled">
+                            <Grid>
+                                <TextBlock FontSize="20" FontWeight="Light" Text="{Binding Content}" TextWrapping="Wrap" />
+                            </Grid>
+                        </ScrollViewer>
+                    </StackPanel>
+                </StackPanel>
+            </ScrollViewer>
+        </Grid>
+
+        <!-- Two column grid only used in layouts with intermediate width -->
+        <Grid Grid.Row="1" x:Name="intermediateContentRegion" Visibility="Collapsed" Margin="120,0,20,20">
+            <ScrollViewer HorizontalScrollBarVisibility="Disabled" VerticalScrollBarVisibility="Auto" HorizontalScrollMode="Disabled" VerticalScrollMode="Enabled" ZoomMode="Disabled">
+                <Grid>
+                    <Grid.ColumnDefinitions>
+                        <ColumnDefinition Width="400" />
+                        <ColumnDefinition Width="40" />
+                        <ColumnDefinition />
+                    </Grid.ColumnDefinitions>
+                    <StackPanel Grid.Column="0" Orientation="Vertical" Margin="0,0,40,0">
+                        <StackPanel Orientation="Vertical">
+                            <TextBlock FontSize="26.667" FontWeight="Light" Text="{Binding Title}" TextWrapping="Wrap"/>
+                            <Image Width="400" Margin="0,20,0,10" Stretch="Uniform" Source="{Binding ImagePath}" HorizontalAlignment="Left"/>
+                            <TextBlock FontSize="20" FontWeight="Light">
+                    <Run Text="Preparation time: "/>
+                    <Run Text="{Binding PreparationTime}" />
+                    <Run Text=" minutes"/>
+                            </TextBlock>
+                        </StackPanel>
+
+                        <StackPanel Orientation="Vertical" Margin="0,40,0,0">
+                            <TextBlock Style="{StaticResource SubheaderTextBlockStyle}" Text="Directions" Margin="0,0,0,16"/>
+                            <ScrollViewer HorizontalScrollBarVisibility="Disabled" VerticalScrollBarVisibility="Auto" HorizontalScrollMode="Disabled" VerticalScrollMode="Enabled" ZoomMode="Disabled">
+                                <Grid>
+                                    <TextBlock FontSize="20" FontWeight="Light" Text="{Binding Content}" TextWrapping="Wrap" />
+                                </Grid>
+                            </ScrollViewer>
+                        </StackPanel>
+                    </StackPanel>
+                    <StackPanel Grid.Column="2" Orientation="Vertical">
+                        <TextBlock Style="{StaticResource SubheaderTextBlockStyle}" Text="Ingredients" Margin="0,0,0,16"/>
+                        <ItemsControl ItemsSource="{Binding Ingredients}">
+                            <ItemsControl.ItemTemplate>
+                                <DataTemplate>
+                                    <TextBlock TextWrapping="Wrap" LineHeight="32.5" FontSize="20" FontWeight="Light" Text="{Binding}" />
+                                </DataTemplate>
+                            </ItemsControl.ItemTemplate>
+                        </ItemsControl>
+                    </StackPanel>
+                </Grid>
+            </ScrollViewer>
+        </Grid>
 
         <!-- Back button and page title -->
         <Grid>
@@ -89,5 +168,44 @@
             <TextBlock x:Name="pageTitle" Text="{Binding Title}" Style="{StaticResource HeaderTextBlockStyle}" Grid.Column="1" 
                         IsHitTestVisible="false" TextWrapping="NoWrap" VerticalAlignment="Bottom" Margin="0,0,30,40"/>
         </Grid>
+
+        <VisualStateManager.VisualStateGroups>
+            <!-- Visual states reflect the application's view state -->
+            <VisualStateGroup x:Name="ApplicationViewStates">
+                <VisualState x:Name="DefaultLayout">
+                    <!-- The default Visibility properties are set in the XAML that defines the objects. -->
+                </VisualState>
+
+                <VisualState x:Name="NarrowLayout">
+                    <Storyboard>
+                        <ObjectAnimationUsingKeyFrames Storyboard.TargetName="contentRegion" Storyboard.TargetProperty="Visibility">
+                            <DiscreteObjectKeyFrame KeyTime="0" Value="Collapsed"/>
+                        </ObjectAnimationUsingKeyFrames>
+                        <ObjectAnimationUsingKeyFrames Storyboard.TargetName="narrowContentRegion" Storyboard.TargetProperty="Visibility">
+                            <DiscreteObjectKeyFrame KeyTime="0" Value="Visible"/>
+                        </ObjectAnimationUsingKeyFrames>
+                        <ObjectAnimationUsingKeyFrames Storyboard.TargetName="intermediateContentRegion" Storyboard.TargetProperty="Visibility">
+                            <DiscreteObjectKeyFrame KeyTime="0" Value="Collapsed"/>
+                        </ObjectAnimationUsingKeyFrames>
+                    </Storyboard>
+                </VisualState>
+
+                <VisualState x:Name="IntermediateLayout">
+                    <Storyboard>
+                        <ObjectAnimationUsingKeyFrames Storyboard.TargetName="contentRegion" Storyboard.TargetProperty="Visibility">
+                            <DiscreteObjectKeyFrame KeyTime="0" Value="Collapsed"/>
+                        </ObjectAnimationUsingKeyFrames>
+                        <ObjectAnimationUsingKeyFrames Storyboard.TargetName="narrowContentRegion" Storyboard.TargetProperty="Visibility">
+                            <DiscreteObjectKeyFrame KeyTime="0" Value="Collapsed"/>
+                        </ObjectAnimationUsingKeyFrames>
+                        <ObjectAnimationUsingKeyFrames Storyboard.TargetName="intermediateContentRegion" Storyboard.TargetProperty="Visibility">
+                            <DiscreteObjectKeyFrame KeyTime="0" Value="Visible"/>
+                        </ObjectAnimationUsingKeyFrames>
+                    </Storyboard>
+                </VisualState>
+            </VisualStateGroup>
+        </VisualStateManager.VisualStateGroups>
+
+
     </Grid>
 </Page>

@@ -93,6 +93,8 @@ namespace ContousCookbook.Data
             this.Description = description;
             this.ImagePath = imagePath;
             this.Items = new ObservableCollection<SampleDataItem>();
+            this.GroupHeaderImagePath = groupHeaderImagePath;
+            this.GroupImagePath = GroupImagePath;
         }
 
         public string UniqueId { get; private set; }
