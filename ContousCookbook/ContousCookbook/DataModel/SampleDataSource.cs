@@ -24,17 +24,17 @@ namespace ContousCookbook.Data
     public class SampleDataItem
     {
         public SampleDataItem(
-            String uniqueId, 
-            String title, 
-            String subtitle, 
-            String imagePath, 
-            String description, 
-            String content, 
-            double preparationTime, 
-            double rating, 
-            bool favorite, 
-            string tileImagePath, 
-            ObservableCollection<string> ingredients, 
+            String uniqueId,
+            String title,
+            String subtitle,
+            String imagePath,
+            String description,
+            String content,
+            double preparationTime,
+            double rating,
+            bool favorite,
+            string tileImagePath,
+            ObservableCollection<string> ingredients,
             SampleDataGroup group
             )
         {
@@ -78,12 +78,12 @@ namespace ContousCookbook.Data
     public class SampleDataGroup
     {
         public SampleDataGroup(
-            String uniqueId, 
-            String title, 
-            String subtitle, 
-            String imagePath, 
-            String description, 
-            string groupImagePath, 
+            String uniqueId,
+            String title,
+            String subtitle,
+            String imagePath,
+            String description,
+            string groupImagePath,
             string groupHeaderImagePath
             )
         {
@@ -189,7 +189,7 @@ namespace ContousCookbook.Data
                                                        itemObject["Rating"].GetNumber(),
                                                        itemObject["Favorite"].GetBoolean(),
                                                        itemObject["TileImagePath"].GetString(),
-                                                       new ObservableCollection<string>(itemObject["Ingredients"].GetArray().Select(p => p.GetString())),group)
+                                                       new ObservableCollection<string>(itemObject["Ingredients"].GetArray().Select(p => p.GetString())), group)
                     );
                 }
                 this.Groups.Add(group);
@@ -215,6 +215,27 @@ namespace ContousCookbook.Data
             await _sampleDataSource.GetSampleDataAsync();
             return _sampleDataSource.Groups.SelectMany(group => group.Items).Where(recipe => recipe.Favorite).Take(count);
         }
+
+        public static IEnumerable<SampleDataGroup> Search(string searchText, bool titleOnly = false)
+        {
+            var query = searchText.ToUpperInvariant();
+            _sampleDataSource.GetSampleDataAsync().Wait();
+            return _sampleDataSource.Groups
+                    .Select(group =>
+                    {
+                        var filteredGroup = new SampleDataGroup(group.UniqueId, group.Title, group.Subtitle, group.ImagePath, group.Description, group.GroupImagePath, group.GroupHeaderImagePath);
+
+                        // add recipes that contain search text in title or content
+                        foreach (var item in group.Items
+                                    .Where(item => item.Title.ToUpperInvariant().Contains(query) || (!titleOnly && item.Content.ToUpperInvariant().Contains(query))))
+                        {
+                            filteredGroup.Items.Add(item);
+                        }
+
+                        return filteredGroup;
+                    });
+        }
+
 
     }
 }
