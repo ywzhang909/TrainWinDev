@@ -238,7 +238,7 @@ namespace ContousCookbook
                     if (!response.IsSuccessStatusCode)
                     {
                         var dialog = new MessageDialog("Unable to open push notification channel");
-                        dialog.ShowAsync();
+                        await dialog.ShowAsync();
                     }
                 }
                 catch (HttpRequestException)

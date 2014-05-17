@@ -3,7 +3,7 @@
   <Identity Name="BUILD.87821274-9e97-488c-b5af-69dace508bff" Publisher="CN=Constoso" Version="1.0.0.0" />
   <Properties>
     <DisplayName>Contous Cookbook</DisplayName>
-    <PublisherDisplayName>Constos</PublisherDisplayName>
+    <PublisherDisplayName>Constoso</PublisherDisplayName>
     <Logo>Assets\StoreLogo.png</Logo>
   </Properties>
   <Prerequisites>
