@@ -18,6 +18,15 @@ using Windows.UI.Xaml.Media;
 using Windows.UI.Xaml.Navigation;
 using Windows.UI.ApplicationSettings;
 using Windows.Storage;
+using Windows.Data.Xml.Dom;
+using Windows.UI.Notifications;
+using System.Threading.Tasks;
+using Windows.Networking.PushNotifications;
+using Windows.Security.Cryptography;
+using System.Net.Http;
+using Windows.Networking.Connectivity;
+using Windows.UI.Popups;
+
 // The Hub App template is documented at http://go.microsoft.com/fwlink/?LinkId=321221
 
 namespace ContousCookbook
@@ -84,6 +93,20 @@ namespace ContousCookbook
                 // Register handler for CommandsRequested events from the settings pane
                 SettingsPane.GetForCurrentView().CommandsRequested += OnCommandsRequested;
 
+                // If the app was activated from a secondary tile, show the recipe
+                if (!String.IsNullOrEmpty(e.Arguments))
+                {
+                    rootFrame.Navigate(typeof(ItemPage), e.Arguments);
+                    Window.Current.Content = rootFrame;
+                    Window.Current.Activate();
+                    return;
+                }
+
+                // Configure Notifications
+                await ConfigureNotifications();
+
+
+
                 // If the app was closed by the user the last time it ran, and if "Remember
                 // "where I was" is enabled, restore the navigation state
                 if (e.PreviousExecutionState == ApplicationExecutionState.ClosedByUser)
@@ -96,6 +119,16 @@ namespace ContousCookbook
                             await SuspensionManager.RestoreAsync();
                         }
                     }
+                }
+
+                if (e.PreviousExecutionState == ApplicationExecutionState.Running)
+                {
+                    if (!String.IsNullOrEmpty(e.Arguments))
+                    {
+                        ((Frame)Window.Current.Content).Navigate(typeof(ItemPage), e.Arguments);
+                    }
+                    Window.Current.Activate();
+                    return;
                 }
 
 
@@ -156,6 +189,64 @@ namespace ContousCookbook
             });
 
             args.Request.ApplicationCommands.Add(preferences);
+        }
+
+        private async static Task ConfigureNotifications()
+        {
+            // Send local notifications
+            TileUpdateManager.CreateTileUpdaterForApplication().EnableNotificationQueueForSquare310x310(true);
+
+            var topRated = await ContousCookbook.Data.SampleDataSource.GetTopRatedRecipesAsync(5);
+
+            foreach (var recipe in topRated.Items)
+            {
+                var templateContent = TileUpdateManager.GetTemplateContent(TileTemplateType.TileSquare310x310BlockAndText02);
+
+                var imageAttributes = templateContent.GetElementsByTagName("image");
+                ((XmlElement)imageAttributes[0]).SetAttribute("src", "ms-appx:///" + recipe.ImagePath);
+                ((XmlElement)imageAttributes[0]).SetAttribute("alt", recipe.Description);
+
+                var tileTextAttributes = templateContent.GetElementsByTagName("text");
+                tileTextAttributes[1].InnerText = recipe.Title;
+                tileTextAttributes[3].InnerText = "Preparation Time";
+                tileTextAttributes[4].InnerText = recipe.PreparationTime.ToString() + " minutes";
+                tileTextAttributes[5].InnerText = "Rating";
+                tileTextAttributes[6].InnerText = recipe.Rating.ToString() + " stars";
+
+                var tileNotification = new TileNotification(templateContent);
+                tileNotification.Tag = recipe.UniqueId;
+
+                TileUpdateManager.CreateTileUpdaterForApplication().Update(tileNotification);
+
+
+            }
+
+            // Register for push notifications
+            var profile = NetworkInformation.GetInternetConnectionProfile();
+
+            if (profile.GetNetworkConnectivityLevel() == NetworkConnectivityLevel.InternetAccess)
+            {
+                var channel = await PushNotificationChannelManager.CreatePushNotificationChannelForApplicationAsync();
+                var buffer = CryptographicBuffer.ConvertStringToBinary(channel.Uri, BinaryStringEncoding.Utf8);
+                var uri = CryptographicBuffer.EncodeToBase64String(buffer);
+                var client = new HttpClient();
+
+                try
+                {
+                    var response = await client.GetAsync(new Uri("http://ContosoRecipes8.cloudapp.net?uri=" + uri + "&type=tile"));
+
+                    if (!response.IsSuccessStatusCode)
+                    {
+                        var dialog = new MessageDialog("Unable to open push notification channel");
+                        dialog.ShowAsync();
+                    }
+                }
+                catch (HttpRequestException)
+                {
+                    var dialog = new MessageDialog("Unable to open push notification channel");
+                    dialog.ShowAsync();
+                }
+            }
         }
 
     }

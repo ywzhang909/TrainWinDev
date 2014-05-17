@@ -20,8 +20,9 @@ using System.Text;
 using Windows.Storage.Streams;
 using Windows.Media.Capture;
 using Windows.Storage;
-
-
+using Windows.UI.StartScreen;
+using Windows.UI.Notifications;
+using Windows.UI.Popups;
 // The Item Page item template is documented at http://go.microsoft.com/fwlink/?LinkId=234232
 
 namespace ContousCookbook
@@ -200,6 +201,46 @@ namespace ContousCookbook
         {
             var item = (SampleDataItem)this.DefaultViewModel["Item"];
             this.Frame.Navigate(typeof(ItemMediaPage), item.UniqueId);
+        }
+
+        private async void OnPinRecipe(object sender, RoutedEventArgs e)
+        {
+            var item = (SampleDataItem)this.DefaultViewModel["Item"];
+            var uri = new Uri("ms-appx:///" + item.TileImagePath);
+
+            var tile = new SecondaryTile(
+                item.UniqueId,
+                item.Title,
+                item.UniqueId,
+                uri,
+                TileSize.Square150x150);
+
+            tile.VisualElements.ShowNameOnSquare150x150Logo = true;
+
+            await tile.RequestCreateAsync();
+        }
+
+        private async void OnRemindRecipe(object sender, RoutedEventArgs e)
+        {
+            var notifier = ToastNotificationManager.CreateToastNotifier();
+
+            // Make sure notifications are enabled
+            if (notifier.Setting != NotificationSetting.Enabled)
+            {
+                var dialog = new MessageDialog("Notifications are currently disabled");
+                await dialog.ShowAsync();
+                return;
+            }
+
+            // Get a toast template and insert a text node containing a message
+            var template = ToastNotificationManager.GetTemplateContent(ToastTemplateType.ToastText01);
+            var element = template.GetElementsByTagName("text")[0];
+            element.AppendChild(template.CreateTextNode("Reminder!"));
+
+            // Schedule the toast to appear 30 seconds from now
+            var date = DateTimeOffset.Now.AddSeconds(30);
+            var stn = new ScheduledToastNotification(template, date);
+            notifier.AddToSchedule(stn);
         }
 
     }

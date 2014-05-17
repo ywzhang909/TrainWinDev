@@ -25,6 +25,17 @@
                         </MenuFlyout>
                     </Button.Flyout>
                 </AppBarButton>
+                <AppBarButton Label="Pin" Click="OnPinRecipe">
+                    <AppBarButton.Icon>
+                        <SymbolIcon Symbol="Pin" />
+                    </AppBarButton.Icon>
+                </AppBarButton>
+                <AppBarButton Label="Reminder" Click="OnRemindRecipe">
+                    <AppBarButton.Icon>
+                        <SymbolIcon Symbol="Clock" />
+                    </AppBarButton.Icon>
+                </AppBarButton>
+
             </CommandBar.SecondaryCommands>
         </CommandBar>
     </Page.BottomAppBar>
