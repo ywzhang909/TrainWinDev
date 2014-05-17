@@ -113,6 +113,12 @@
     <Compile Include="HubPage.xaml.cs">
       <DependentUpon>HubPage.xaml</DependentUpon>
     </Compile>
+    <Compile Include="ItemMediaPage.xaml.cs">
+      <DependentUpon>ItemMediaPage.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="PlaybackPage.xaml.cs">
+      <DependentUpon>PlaybackPage.xaml</DependentUpon>
+    </Compile>
     <Compile Include="SearchResultsPage1.xaml.cs">
       <DependentUpon>SearchResultsPage1.xaml</DependentUpon>
     </Compile>
@@ -128,6 +134,7 @@
     <Compile Include="Common\NavigationHelper.cs" />
     <Compile Include="Common\RelayCommand.cs" />
     <Compile Include="Common\ObservableDictionary.cs" />
+    <Compile Include="Templates\MediaTemplateSelector.cs" />
   </ItemGroup>
   <ItemGroup>
     <AppxManifest Include="Package.appxmanifest">
@@ -264,6 +271,14 @@
     <Page Include="HubPage.xaml">
       <Generator>MSBuild:Compile</Generator>
       <SubType>Designer</SubType>
+    </Page>
+    <Page Include="ItemMediaPage.xaml">
+      <Generator>MSBuild:Compile</Generator>
+      <SubType>Designer</SubType>
+    </Page>
+    <Page Include="PlaybackPage.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
     </Page>
     <Page Include="SearchResultsPage1.xaml">
       <SubType>Designer</SubType>

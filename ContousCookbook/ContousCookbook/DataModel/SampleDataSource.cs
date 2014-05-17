@@ -50,7 +50,7 @@ namespace ContousCookbook.Data
             this.TileImagePath = tileImagePath;
             this.Ingredients = ingredients;
             this.Group = group;
-
+            this.Media = new ObservableCollection<StorageFile>();
         }
 
         public string UniqueId { get; private set; }
@@ -65,6 +65,7 @@ namespace ContousCookbook.Data
         public string TileImagePath { get; private set; }
         public ObservableCollection<string> Ingredients { get; private set; }
         public SampleDataGroup Group { get; private set; }
+        public ObservableCollection<StorageFile> Media { get; private set; }
 
         public override string ToString()
         {

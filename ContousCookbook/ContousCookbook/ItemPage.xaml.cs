@@ -18,6 +18,9 @@ using Windows.UI.Xaml.Navigation;
 using Windows.ApplicationModel.DataTransfer;
 using System.Text;
 using Windows.Storage.Streams;
+using Windows.Media.Capture;
+using Windows.Storage;
+
 
 // The Item Page item template is documented at http://go.microsoft.com/fwlink/?LinkId=234232
 
@@ -29,6 +32,8 @@ namespace ContousCookbook
     public sealed partial class ItemPage : Page
     {
         private NavigationHelper navigationHelper;
+        private StorageFile _photo; // Photo file to share
+        private StorageFile _video; // Video file to share
         private ObservableDictionary defaultViewModel = new ObservableDictionary();
 
         /// <summary>
@@ -125,19 +130,76 @@ namespace ContousCookbook
             var request = args.Request;
             var item = (SampleDataItem)this.DefaultViewModel["Item"];
             request.Data.Properties.Title = item.Title;
-            request.Data.Properties.Description = "Recipe ingredients and directions";
 
-            // Share recipe text
-            var recipe = "\r\nINGREDIENTS\r\n";
-            recipe += String.Join("\r\n", item.Ingredients);
-            recipe += ("\r\n\r\nDIRECTIONS\r\n" + item.Content);
-            request.Data.SetText(recipe);
+            if (_photo != null)
+            {
+                request.Data.Properties.Description = "Recipe photo";
+                var reference = Windows.Storage.Streams.RandomAccessStreamReference.CreateFromFile(_photo);
+                request.Data.Properties.Thumbnail = reference;
+                request.Data.SetBitmap(reference);
+                _photo = null;
+            }
+            else if (_video != null)
+            {
+                request.Data.Properties.Description = "Recipe video";
+                List<StorageFile> items = new List<StorageFile>();
+                items.Add(_video);
+                request.Data.SetStorageItems(items);
+                _video = null;
+            }
 
-            // Share recipe image
-            var reference = RandomAccessStreamReference.CreateFromUri(new Uri("ms-appx:///" + item.ImagePath));
-            request.Data.Properties.Thumbnail = reference;
-            request.Data.SetBitmap(reference);
+            else
+            {
+                request.Data.Properties.Description = "Recipe ingredients and directions";
 
+                // Share recipe text
+                var recipe = "\r\nINGREDIENTS\r\n";
+                recipe += String.Join("\r\n", item.Ingredients);
+                recipe += ("\r\n\r\nDIRECTIONS\r\n" + item.Content);
+                request.Data.SetText(recipe);
+
+                // Share recipe image
+                var reference = RandomAccessStreamReference.CreateFromUri(new Uri("ms-appx:///" + item.ImagePath));
+                request.Data.Properties.Thumbnail = reference;
+                request.Data.SetBitmap(reference);
+            }
+
+        }
+
+        private async void OnCapturePhoto(object sender, RoutedEventArgs e)
+        {
+            var camera = new CameraCaptureUI();
+            var file = await camera.CaptureFileAsync(CameraCaptureUIMode.Photo);
+
+            if (file != null)
+            {
+                var item = (SampleDataItem)this.DefaultViewModel["Item"];
+                item.Media.Add(file);
+                _photo = file;
+                DataTransferManager.ShowShareUI();
+            }
+        }
+
+        private async void OnCaptureVideo(object sender, RoutedEventArgs e)
+        {
+            var camera = new CameraCaptureUI();
+            camera.VideoSettings.Format = CameraCaptureUIVideoFormat.Wmv;
+            var file = await camera.CaptureFileAsync(CameraCaptureUIMode.Video);
+
+            if (file != null)
+            {
+                var item = (SampleDataItem)this.DefaultViewModel["Item"];
+                item.Media.Add(file);
+                _video = file;
+                DataTransferManager.ShowShareUI();
+            }
+
+        }
+
+        private void OnNavigateToMedia(object sender, RoutedEventArgs e)
+        {
+            var item = (SampleDataItem)this.DefaultViewModel["Item"];
+            this.Frame.Navigate(typeof(ItemMediaPage), item.UniqueId);
         }
 
     }

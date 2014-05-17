@@ -11,6 +11,42 @@
     xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
     mc:Ignorable="d">
 
+    <Page.BottomAppBar>
+        <CommandBar>
+            <CommandBar.SecondaryCommands>
+                <AppBarButton Label="Brag">
+                    <AppBarButton.Icon>
+                        <SymbolIcon Symbol="Emoji2" />
+                    </AppBarButton.Icon>
+                    <Button.Flyout>
+                        <MenuFlyout>
+                            <MenuFlyoutItem Text="Photo" Click="OnCapturePhoto"/>
+                            <MenuFlyoutItem Text="Video" Click="OnCaptureVideo"/>
+                        </MenuFlyout>
+                    </Button.Flyout>
+                </AppBarButton>
+            </CommandBar.SecondaryCommands>
+        </CommandBar>
+    </Page.BottomAppBar>
+
+    <Page.TopAppBar>
+        <AppBar>
+            <StackPanel Orientation="Horizontal" Margin="25">
+                <Button Width="150"
+                    Click="OnNavigateToMedia"
+                    HorizontalContentAlignment="Left"
+                    Background="{ThemeResource ApplicationPageBackgroundThemeBrush}"
+                    BorderBrush="{ThemeResource ApplicationPageBackgroundThemeBrush}">
+                    <StackPanel Orientation="Vertical" >
+                        <SymbolIcon Symbol="Play" HorizontalAlignment="left" />
+                        <TextBlock Text="MEDIA" HorizontalAlignment="left" />
+                    </StackPanel>
+                </Button>
+            </StackPanel>
+        </AppBar>
+    </Page.TopAppBar>
+
+
     <!--
         This grid acts as a root panel for the page that defines two rows:
         * Row 0 contains the back button and page title
