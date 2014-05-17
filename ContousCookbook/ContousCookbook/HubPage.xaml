@@ -101,29 +101,25 @@
                         </DataTemplate>
                     </HubSection>
                     <HubSection x:Uid="Section2Header" Header="International Cuisine"
-                DataContext="{Binding Section2Items}" d:DataContext="{Binding Groups, Source={d:DesignData Source=/DataModel/SampleData.json, Type=data:SampleDataSource}}" Width="535">
+                             DataContext="{Binding Section2Items}" d:DataContext="{Binding Groups, Source={d:DesignData Source=/DataModel/SampleData.json, Type=data:SampleDataSource}}" Width="535">
                         <DataTemplate>
                             <ListView
-                        x:Name="groupListView"
-                        AutomationProperties.AutomationId="GroupListView"
-                        AutomationProperties.Name="Groups"
-                        TabIndex="1"
+                                x:Name="groupListView"
+                                AutomationProperties.AutomationId="GroupListView"
+                                AutomationProperties.Name="Groups"
+                                TabIndex="1"
                         
-                        Grid.Row="1"
-                        Margin="-9,-6,0,0"
-                        ItemsSource="{Binding}"
-                        ItemTemplate="{StaticResource GroupItemsTemplate}"
-                        SelectionMode="None"
-                        IsSwipeEnabled="false"
-                        IsItemClickEnabled="True"
-                        ItemClick="ItemView_GroupClick" Width="498" RenderTransformOrigin="0.5,0.5">
-                                <ListView.RenderTransform>
-                                    <CompositeTransform SkewY="1.718" TranslateY="7.47"/>
-                                </ListView.RenderTransform>
+                                Grid.Row="1"
+                                Margin="-9,-6,0,0"
+                                ItemsSource="{Binding}"
+                                ItemTemplate="{StaticResource GroupItemsTemplate}"
+                                SelectionMode="None"
+                                IsSwipeEnabled="false"
+                                IsItemClickEnabled="True"
+                                ItemClick="ItemView_GroupClick" Width="498" RenderTransformOrigin="0.5,0.5">
                             </ListView>
                         </DataTemplate>
                     </HubSection>
-
                     <HubSection IsHeaderInteractive="False" DataContext="{Binding Section3Items}" 
                         d:DataContext="{Binding Groups[3], Source={d:DesignData Source=/DataModel/SampleData.json, Type=data:SampleDataSource}}" 
                         x:Uid="Section3Header" Header="Top Rated" Padding="40,40,40,32">
