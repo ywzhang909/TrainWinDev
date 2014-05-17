@@ -32,10 +32,10 @@
         <DataTemplate x:Key="GroupItemsTemplate">
             <Grid Margin="2">
                 <StackPanel Orientation="Horizontal">
-                    <Image Source="{Binding GroupHeaderImagePath}" Stretch="UniformToFill" />
                     <Image Source="{Binding Items[0].TileImagePath}" Stretch="UniformToFill" />
+                    <Image Source="{Binding GroupHeaderImagePath}" Stretch="UniformToFill" />
                 </StackPanel>
-                <TextBlock Text="{Binding Title}" HorizontalAlignment="Left" Margin="20" Foreground="{StaticResource ListViewItemOverlayForegroundThemeBrush}" Style="{StaticResource SubheaderTextBlockStyle}" />
+                <TextBlock Text="{Binding Title}" HorizontalAlignment="Right" Margin="20" Foreground="{StaticResource ListViewItemOverlayForegroundThemeBrush}" Style="{StaticResource SubheaderTextBlockStyle}" />
             </Grid>
         </DataTemplate>
 
@@ -189,6 +189,17 @@
 
             </SemanticZoom.ZoomedOutView>
         </SemanticZoom>
+
+        <SearchBox x:Name="Search"
+            QuerySubmitted="Search_QuerySubmitted"
+            Width="300" Height="35" Margin="10" 
+            HorizontalAlignment="Right" VerticalAlignment="Top"
+            FocusOnKeyboardInput="True"
+            PlaceholderText="Search Contous Cookbook"
+            SuggestionsRequested="Search_SuggetionsRequested"
+            ResultSuggestionChosen="Search_ResultSuggestionChosen"
+                   
+         />
 
 
     </Grid>

@@ -17,6 +17,7 @@ using Windows.UI.Xaml.Data;
 using Windows.UI.Xaml.Input;
 using Windows.UI.Xaml.Media;
 using Windows.UI.Xaml.Navigation;
+using ContousCookbook.Data;
 
 // TODO: Connect the Search Results Page to your in-app search.
 // The Search Results Page item template is documented at http://go.microsoft.com/fwlink/?LinkId=234240
@@ -30,6 +31,8 @@ namespace ContousCookbook
     {
         private NavigationHelper navigationHelper;
         private ObservableDictionary defaultViewModel = new ObservableDictionary();
+        // Collection of SampleDataGroup instances representing search results
+        private IEnumerable<SampleDataGroup> _results;
 
         /// <summary>
         /// This can be changed to a strongly typed view model.
@@ -79,6 +82,19 @@ namespace ContousCookbook
             var filterList = new List<Filter>();
             filterList.Add(new Filter("All", 0, true));
 
+            // Search recipes 
+            _results = SampleDataSource.Search(queryText);
+
+            // Initialize total count for the "All" filter
+            filterList[0].Count = _results.SelectMany(p => p.Items).Count();
+
+            // Create additional filters for each group
+            foreach (var group in _results)
+            {
+                filterList.Add(new Filter(group.Title, group.Items.Count, false));
+            }
+
+
             // Communicate results through the view model
             this.DefaultViewModel["QueryText"] = '\u201c' + queryText + '\u201d';
             this.DefaultViewModel["Filters"] = filterList;
@@ -111,6 +127,10 @@ namespace ContousCookbook
 
                 // TODO: Respond to the change in active filter by setting this.DefaultViewModel["Results"]
                 //       to a collection of items with bindable Image, Title, Subtitle, and Description properties
+                var filteredGroup = _results.FirstOrDefault(group => group.Title == selectedFilter.Name);
+                this.defaultViewModel["Results"] = selectedFilter.Name == "All" ?
+                                                    _results.SelectMany(p => p.Items).ToList() :
+                                                    (filteredGroup != null) ? filteredGroup.Items.ToList() : null;
 
                 // Ensure results are found
                 object results;
@@ -235,6 +255,13 @@ namespace ContousCookbook
                     eventHandler(this, new PropertyChangedEventArgs(propertyName));
                 }
             }
+
+        }
+
+        private void OnItemClick(object sender, ItemClickEventArgs e)
+        {
+            // Navigate to the page showing the recipe that was clicked
+            this.Frame.Navigate(typeof(ItemPage), ((SampleDataItem)e.ClickedItem).UniqueId);
 
         }
     }

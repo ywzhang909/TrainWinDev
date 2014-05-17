@@ -94,7 +94,7 @@
                                     <ColumnDefinition Width="*"/>
                                 </Grid.ColumnDefinitions>
                                 <Border Background="{ThemeResource ListViewItemPlaceholderBackgroundThemeBrush}" Margin="0,0,0,10" Width="60" Height="45">
-                                    <Image Source="{Binding Image}" Stretch="UniformToFill"/>
+                                    <Image Source="{Binding ImagePath}" Stretch="UniformToFill"/>
                                 </Border>
                                 <StackPanel Grid.Column="1" Margin="10,-10,0,0">
                                     <TextBlock Text="{Binding Subtitle}" TextWrapping="NoWrap" Style="{StaticResource BodyTextBlockStyle}"/>
